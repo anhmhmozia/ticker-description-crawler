@@ -7,7 +7,7 @@ cfg.run()
 def ticker_crawler():
     items = []
     today = datetime.today().strftime("%Y-%m-%d")
-    symbols = mysql_connection.select_normal('tickers', ['ticker'], 'WHERE description_crawl_at is null', 'scalemarketcap desc', 1000)
+    symbols = mysql_connection.select_normal('tickers', ['ticker'], 'WHERE description_crawl_at is null', 'scalemarketcap desc', 100)
     for s in symbols:
         symbol = s[0]
         print(symbol)
@@ -19,6 +19,7 @@ def ticker_crawler():
             items.append((symbol, description, website, today))
         except Exception as e:
             print('Error')
+            items.append((symbol, '', '', today))
             continue
 
     mysql_connection.insert_or_update('tickers', [
